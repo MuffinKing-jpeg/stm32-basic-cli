@@ -1,0 +1,12 @@
+.pio
+.vscode/.browse.c_cpp.db*
+.vscode/ipch
+
+#build junk
+build/
+
+#HAL drivers
+Drivers/STM32*
+
+#CMSIS drivers
+Drivers/CMSIS
