@@ -5,19 +5,13 @@
 #include "toggle_pin.h"
 
 #define CMD_UNKNOWN_STR  "\0"
-#define QTY_CMD sizeof(CommandID)+1
 
 typedef enum {
-    CMD_UNKNOWN,  // For unknown commands
-    CMD_LED
+    CMD_LED,
+    QTY_CMD //Must be last element
 } CommandID;
 
 Command command_table[QTY_CMD]  = {
-    [CMD_UNKNOWN] = {
-        "\0",
-        rejected_cmd,
-        0
-    },
     [CMD_LED] = {
         "led",
         cmd_led,

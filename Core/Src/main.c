@@ -70,7 +70,12 @@ int main(void)
 {
 
     /* USER CODE BEGIN 1 */
+
+#ifndef USE_PRECALCULATED_HASH
+
     populate_cmd_hash();
+
+#endif
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/

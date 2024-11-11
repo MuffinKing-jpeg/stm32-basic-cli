@@ -47,6 +47,8 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
 
+#define CCMRAM __attribute__((section(".ccmram")))
+
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/

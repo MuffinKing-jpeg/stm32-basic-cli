@@ -4,14 +4,13 @@
 #include "toggle_pin.h"
 #include <string.h>
 
-__attribute__((section(".ccmram"))) char command_buffer[RX_BUFFER_SIZE] = {0};
-__attribute__((section(".ccmram"))) Tokens tokens;
+CCMRAM char command_buffer[RX_BUFFER_SIZE] = {0};
 uint16_t buffer_index = 0;
 uint8_t rx_data = '\0';
 
 uint32_t calculate_hash(const char *str)
 {
-    uint32_t hash = HASH_PRIME; // Initialize with a large prime number
+    uint32_t hash = HASH_PRIME;
     int c;
 
     while ((c = *str++))
@@ -22,6 +21,8 @@ uint32_t calculate_hash(const char *str)
     return hash;
 }
 
+#ifndef USE_PRECALCULATED_HASH
+
 void populate_cmd_hash()
 {
     for (uint8_t i = 0; i < QTY_CMD; i++)
@@ -29,6 +30,8 @@ void populate_cmd_hash()
         command_table[i].hash = calculate_hash(command_table[i].command_name);
     }
 }
+
+#endif
 
 void start_rx()
 {
@@ -74,13 +77,35 @@ void process_command()
 
 void parse_command()
 {
+    HAL_UART_Transmit(&huart2, (uint8_t *)"\r\n", 2, HAL_MAX_DELAY);
+    command_buffer[buffer_index] = '\0'; //Replacing newline with null 
+
+    uint8_t is_command_found = 0;
     uint32_t cmd = 0;
     char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH] = {0};
     tokenize(command_buffer, args, &cmd);
+
+
+
+    for (uint8_t i = 0; i < QTY_CMD; i++)
+    {
+        if (command_table[i].hash == cmd)
+        {
+            command_table[i].handler(args);
+            is_command_found = 1;
+        }
+        
+    }
+    if (is_command_found == 0)
+    {
+        rejected_cmd();
+    }
+    
+
     clear_buffer();
 }
 
-void tokenize(const char *input, char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH], uint32_t *cmd_hash)
+void tokenize(const char *input, Tokens args, uint32_t *cmd_hash)
 {
     int arg_count = 0;
 
@@ -92,9 +117,7 @@ void tokenize(const char *input, char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH], ui
     char *token = strtok(input_copy, " ");
     if (token != NULL)
     {
-        char command[MAX_TOKEN_LENGTH];
-        command[MAX_TOKEN_LENGTH - 1] = '\0';
-        *cmd_hash = calculate_hash(command);
+        *cmd_hash = calculate_hash(token);
         // Tokenize arguments
         while ((token = strtok(NULL, " ")) != NULL && arg_count < MAX_TOKENS - 1)
         {
@@ -107,11 +130,8 @@ void tokenize(const char *input, char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH], ui
 
 void rejected_cmd()
 {
-    char response[] = "\r\nUnknow command\r\n";
-    while (!(USART2->ISR & USART_ISR_TC))
-    {
-    }
-    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)response, strlen(response));
+    const char unknown_seq[] = "Unknown command\r\n";
+    HAL_UART_Transmit(&huart2, (uint8_t *)unknown_seq, sizeof(unknown_seq), HAL_MAX_DELAY);
     clear_buffer();
 }
 
@@ -120,7 +140,7 @@ void clear_input()
     if (buffer_index > 0)
     {
         const char clear_seq[] = "\033[1J\033[H"; // Some legacy ASCII shit.
-        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)clear_seq, sizeof(clear_seq));
+        HAL_UART_Transmit(&huart2, (uint8_t *)clear_seq, sizeof(clear_seq), HAL_MAX_DELAY);
     }
     clear_buffer();
 }
