@@ -31,6 +31,7 @@ void rejected_cmd();
 void tokenize(const char *input, char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH], uint32_t *cmd_hash);
 void clear_buffer(void);
 void clear_input(void);
+void cmd_clear(Tokens args);
 void clear_last_input(void);
 uint32_t calculate_hash(const char *str);
 

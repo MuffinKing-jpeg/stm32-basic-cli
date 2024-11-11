@@ -8,6 +8,7 @@
 
 typedef enum {
     CMD_LED,
+    CMD_CLEAR,
     QTY_CMD //Must be last element
 } CommandID;
 
@@ -15,6 +16,11 @@ Command command_table[QTY_CMD]  = {
     [CMD_LED] = {
         "led",
         cmd_led,
+        0
+    },
+    [CMD_CLEAR] = {
+        "clear",
+        cmd_clear,
         0
     }
 };

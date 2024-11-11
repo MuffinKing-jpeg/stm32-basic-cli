@@ -85,8 +85,6 @@ void parse_command()
     char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH] = {0};
     tokenize(command_buffer, args, &cmd);
 
-
-
     for (uint8_t i = 0; i < QTY_CMD; i++)
     {
         if (command_table[i].hash == cmd)
@@ -100,8 +98,6 @@ void parse_command()
     {
         rejected_cmd();
     }
-    
-
     clear_buffer();
 }
 
@@ -133,6 +129,11 @@ void rejected_cmd()
     const char unknown_seq[] = "Unknown command\r\n";
     HAL_UART_Transmit(&huart2, (uint8_t *)unknown_seq, sizeof(unknown_seq), HAL_MAX_DELAY);
     clear_buffer();
+}
+
+void cmd_clear(Tokens args){
+    (void)args;
+    clear_input();
 }
 
 void clear_input()
