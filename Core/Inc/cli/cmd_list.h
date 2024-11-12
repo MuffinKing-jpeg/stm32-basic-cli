@@ -16,12 +16,12 @@ Command command_table[QTY_CMD]  = {
     [CMD_LED] = {
         "led",
         cmd_led,
-        0
+        193413224
     },
     [CMD_CLEAR] = {
         "clear",
         cmd_clear,
-        0
+        176922748
     }
 };
 
