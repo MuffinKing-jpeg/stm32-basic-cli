@@ -82,7 +82,7 @@ void parse_command()
 
     uint8_t is_command_found = 0;
     uint32_t cmd = 0;
-    char args[MAX_TOKENS - 1][MAX_TOKEN_LENGTH] = {0};
+    Tokens args = {0};
     tokenize(command_buffer, args, &cmd);
 
     for (uint8_t i = 0; i < QTY_CMD; i++)
@@ -115,7 +115,7 @@ void tokenize(const char *input, Tokens args, uint32_t *cmd_hash)
     {
         *cmd_hash = calculate_hash(token);
         // Tokenize arguments
-        while ((token = strtok(NULL, " ")) != NULL && arg_count < MAX_TOKENS - 1)
+        while ((token = strtok(NULL, " ")) != NULL && arg_count < MAX_TOKENS)
         {
             strncpy(args[arg_count], token, MAX_TOKEN_LENGTH);
             args[arg_count][MAX_TOKEN_LENGTH - 1] = '\0';

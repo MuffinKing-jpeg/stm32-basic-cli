@@ -14,7 +14,7 @@
 #define RX_BUFFER_SIZE 64
 
 
-typedef char (Tokens)[MAX_TOKENS-1][MAX_TOKEN_LENGTH];
+typedef char (Tokens)[MAX_TOKENS][MAX_TOKEN_LENGTH];
 
 typedef void (*CommandHandler)(Tokens);
 
