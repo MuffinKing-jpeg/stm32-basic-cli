@@ -41,16 +41,16 @@ add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
-
+add_subdirectory(Drivers/AHT20)
 
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 # Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME}
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     stm32cubemx
-
+    aht20
     # Add user defined libraries
 )
 file(GLOB SRC_FILES "./Core/Src/cli/*.c")
