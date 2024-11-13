@@ -2,6 +2,9 @@
 #define __CLI_H__
 
 #include "main.h"
+#include "usart.h"
+
+#define HAL_UART_PORT huart2 // Select used UART periphery
 
 #define MAX_TOKENS 5
 #define MAX_TOKEN_LENGTH 32

@@ -35,7 +35,7 @@ void populate_cmd_hash()
 
 void start_rx()
 {
-    HAL_UART_Receive_DMA(&huart2, &rx_data, 1);
+    HAL_UART_Receive_DMA(&HAL_UART_PORT, &rx_data, 1);
 }
 
 void process_command()
@@ -62,7 +62,7 @@ void process_command()
         default:
             if (buffer_index < RX_BUFFER_SIZE - 1)
             {
-                HAL_UART_Transmit_DMA(&huart2, &rx_data, 1);
+                HAL_UART_Transmit_DMA(&HAL_UART_PORT, &rx_data, 1);
                 buffer_index++;
             }
             start_rx();
@@ -77,7 +77,7 @@ void process_command()
 
 void parse_command()
 {
-    HAL_UART_Transmit(&huart2, (uint8_t *)"\r\n", 2, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&HAL_UART_PORT, (uint8_t *)"\r\n", 2, HAL_MAX_DELAY);
     command_buffer[buffer_index] = '\0'; //Replacing newline with null 
 
     uint8_t is_command_found = 0;
@@ -127,7 +127,7 @@ void tokenize(const char *input, Tokens args, uint32_t *cmd_hash)
 void rejected_cmd()
 {
     const char unknown_seq[] = "Unknown command\r\n";
-    HAL_UART_Transmit(&huart2, (uint8_t *)unknown_seq, sizeof(unknown_seq), HAL_MAX_DELAY);
+    HAL_UART_Transmit(&HAL_UART_PORT, (uint8_t *)unknown_seq, sizeof(unknown_seq), HAL_MAX_DELAY);
     clear_buffer();
 }
 
@@ -141,7 +141,7 @@ void clear_input()
     if (buffer_index > 0)
     {
         const char clear_seq[] = "\033[1J\033[H"; // Some legacy ASCII shit.
-        HAL_UART_Transmit(&huart2, (uint8_t *)clear_seq, sizeof(clear_seq), HAL_MAX_DELAY);
+        HAL_UART_Transmit(&HAL_UART_PORT, (uint8_t *)clear_seq, sizeof(clear_seq), HAL_MAX_DELAY);
     }
     clear_buffer();
 }
@@ -154,7 +154,7 @@ void clear_last_input()
         buffer_index--; // Remove last character
         command_buffer[buffer_index] = 0;
         char backspace_seq[] = "\b \b";
-        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)backspace_seq, strlen(backspace_seq));
+        HAL_UART_Transmit(&HAL_UART_PORT, (uint8_t *)backspace_seq, strlen(backspace_seq), HAL_MAX_DELAY);
     }
     start_rx();
 }
