@@ -7,8 +7,8 @@
             "intelliSenseMode": "${default}",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/Core/Inc/",
-                "${workspaceFolder}/Drivers/STM32F3xx_HAL_Driver/Inc"
+                "${workspaceFolder}/Core/Inc/**",
+                "${workspaceFolder}/Drivers/**"
             ],
             "cStandard": "c11"
         }
