@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "cli.h"
+#include "aht20.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,8 +37,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
-void UART_IdleCallback(UART_HandleTypeDef *huart);
 
 /* USER CODE END PD */
 
@@ -49,6 +48,9 @@ void UART_IdleCallback(UART_HandleTypeDef *huart);
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+float temp = 0;
+float humidity = 0;
 
 /* USER CODE END PV */
 
@@ -104,6 +106,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
     start_rx();
+
+    AHT20_Init();
+    HAL_Delay(150);
+    AHT20_StartMeasurement();
+    HAL_Delay(150);
+    AHT20_ParseData(&temp,&humidity);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -113,7 +122,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-        NULL;
     }
   /* USER CODE END 3 */
 }

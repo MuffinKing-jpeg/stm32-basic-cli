@@ -74,6 +74,8 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
+#define AHT20_I2C hi2c1
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
