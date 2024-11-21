@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Set the project name
-set(CMAKE_PROJECT_NAME DEBUGING_WITH_F303)
+set(CMAKE_PROJECT_NAME DEBUGGING_WITH_F303)
 
 # Include toolchain file
 
@@ -42,6 +42,8 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
 add_subdirectory(Drivers/AHT20)
+add_subdirectory(Drivers/SX1278)
+
 
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
@@ -51,6 +53,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     stm32cubemx
     aht20
+    sx1278
     # Add user defined libraries
 )
 file(GLOB SRC_FILES "./Core/Src/cli/*.c")
