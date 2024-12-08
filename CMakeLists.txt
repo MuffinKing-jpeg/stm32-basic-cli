@@ -43,6 +43,7 @@ add_executable(${CMAKE_PROJECT_NAME})
 add_subdirectory(cmake/stm32cubemx)
 add_subdirectory(Drivers/AHT20)
 add_subdirectory(Drivers/SX1278)
+add_subdirectory(Libs/CLI)
 
 
 # Link directories setup
@@ -52,12 +53,13 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     stm32cubemx
+    cli
     aht20
     sx1278
     # Add user defined libraries
 )
-file(GLOB SRC_FILES "./Core/Src/cli/*.c")
 file(GLOB DBG_FILES "./Core/Src/debug/*.c")
+file(GLOB DBG_FILES "./Core/Src/*.c")
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # ${CMAKE_SOURCE_DIR}/Core/Src/cli.c
@@ -68,7 +70,6 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-${CMAKE_SOURCE_DIR}/Core/Inc/cli/
     # Add user defined include paths
 )
 

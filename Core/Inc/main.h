@@ -75,6 +75,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 #define AHT20_I2C hi2c1
+#define CLI_UART huart2
 
 /* USER CODE END Private defines */
 
